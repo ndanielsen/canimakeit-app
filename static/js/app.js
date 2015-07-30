@@ -5,6 +5,11 @@
   var usMap = new Datamap({
     scope: 'usa',
     element: document.getElementById('map_election'),
+    done: function(datamap) {
+        datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+            window.location.href = '/states/' + geography.id;
+        });
+    },
     geographyConfig: {
       highlightBorderColor: '#bada55',
      popupTemplate: function(geography, data) {
