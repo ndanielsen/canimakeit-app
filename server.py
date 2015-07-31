@@ -1,27 +1,30 @@
+# To do: pass making it as query param
+
+
 from flask import Flask, request, render_template
 from model.recommender import Recommender
+from mocks import get_state_info
+from constants import states_dict, making_it_verbs_dict
 import json
 
 app = Flask('canimakeit')
 
-states = ['AK', 'AL', 'AR', 'AS', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL',
-          'GA',
-          'GU', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD',
-          'ME',
-          'MI', 'MN', 'MO', 'MP',
-          'MS', 'MT', 'NA', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY',
-          'OH',
-          'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA',
-          'VI',
-          'VT', 'WA', 'WI', 'WV', 'WY']
-
-
 recommender = Recommender()
+
+
+def enrich_state_cluster(state_cluster):
+    new_dict = {}
+
+    for key in state_cluster:
+        making_it = state_cluster[key]['fillKey']
+        new_dict[key] = {'fillKey': making_it, 'making_it': making_it}
+    print new_dict
+    return new_dict
 
 
 @app.route('/')
 def home():
-    return render_template('index.html', states=states)
+    return render_template('index.html', states=states_dict.keys())
 
 
 @app.route('/static/<path:path>')
@@ -36,7 +39,9 @@ def post():
     salary = int(data['salary'])
     # print 'salary is', salary
     recommendation = recommender.recommend(user_salary=salary)
-    return json.dumps(recommendation['statecluster'])
+    state_cluster = enrich_state_cluster(recommendation['statecluster'])
+    print state_cluster
+    return json.dumps(state_cluster)
     # making_it_by_state = info_to_making_it(data)
     # return json.dumps(making_it_by_state)
 
@@ -44,9 +49,18 @@ def post():
 # pass variables to html
 @app.route('/states/<state>')
 def state(state):
-    # return render_template('index.html')
-    return render_template('states.html', state=state, number=1)
+    # so we have this in locals()
+    state_info = get_state_info(state)
 
+    making_it_id = int(request.args.get('making_it_id')) or 3
+    making_it_verb = making_it_verbs_dict[making_it_id]
+
+    state_desc = states_dict[state]
+
+    return render_template('states.html',
+                           state_info=state_info,
+                           making_it_verb=making_it_verb,
+                           state_desc=state_desc)
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,13 +1,19 @@
 (function(){
     
       //choropleth
-        
+  
+  var stateStatuses = {};
+
   var usMap = new Datamap({
     scope: 'usa',
     element: document.getElementById('map_election'),
     done: function(datamap) {
         datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
-            window.location.href = '/states/' + geography.id;
+            var stateCode = geography.id;
+            var stateData = stateStatuses[stateCode];
+            makingItId = stateData? stateData['fillKey'] : 3;
+            var url = '/states/' + stateCode + '?making_it_id=' + makingItId;
+            window.location.href = url;
         });
     },
     geographyConfig: {
@@ -67,7 +73,10 @@
     var el = document.createElement('div');
     document.body.appendChild(el);
 
-    var displayData = usMap.updateChoropleth.bind(usMap)
+    var displayData = function(data){
+      usMap.updateChoropleth(data);
+      stateStatuses = data;
+    };
 
 
 

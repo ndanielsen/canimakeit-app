@@ -1,20 +1,26 @@
 <!doctype html>
 <html>
-<title>
 
-Hello
+<head>
+    <title>
+        State Info
+    </title>
+    <link rel="stylesheet" href="/static/css/app.css"></link>
+<body>
+    <h1>
 
-</title>
-    <body>
-        <h1>
+    Welcome to the {{ state_desc }} info page.
 
-        Welcome to the {{ state }} page!
+    </h1>
+    <h2>
 
-        </h1>
-        <h2>
+    The average household in this state earns {{ state_info['income'] }} and has a family size of {{ state_info['household_size'] }}.
 
-        You have the greek letter # {{ number }} .
-        </h2>
-    <body>
+    </h2>
+
+    <h2>
+    Given your information, in {{ state_desc }}, you would <span class="making-it-verb">{{ making_it_verb}}</span>.
+    </h2>
+<body>
 
 </html>
