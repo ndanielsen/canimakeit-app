@@ -1,0 +1,6 @@
+*.pdf
+*.pyc
+*.sqlite3
+*.autosave
+.directory
+
