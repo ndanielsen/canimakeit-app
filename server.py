@@ -7,7 +7,7 @@ from mocks import get_state_info
 from constants import states_dict, making_it_verbs_dict
 import json
 
-app = Flask('canimakeit')
+app = Flask(__name__)
 
 recommender = Recommender()
 
