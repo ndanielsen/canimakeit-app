@@ -8,3 +8,6 @@ itsdangerous==0.24
 jellyfish==0.2.1
 us==0.9.0
 wsgiref==0.1.2
+scikit-learn==0.16.1
+scipy==0.13.3
+numpy==1.8.2
