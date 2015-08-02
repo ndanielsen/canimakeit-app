@@ -4,7 +4,7 @@ Prediction using trained models in a class format
 """
 
 ### MVP Imports
-import us, random
+import us, random, os
 import pickle
 from sklearn.linear_model import LogisticRegression
 
@@ -98,10 +98,10 @@ class StateCluster(ModelBase):
 
 	def log_clusters(self, salary=None, family_size=None, own=None, rent=None):
 
-		# pickle_file = 'state/mvp_2015_0801.pickle'
+		pickle_file = os.path.abspath('state/mvp_2015_0801.pickle')
 		
 		def pickle_loader(pickle_file):
-			with open(pickle_file, "r") as fp: 	#Load model from file
+			with open(pickle_file, "r+") as fp: 	#Load model from file
 				pred = pickle.load(fp)
 				return pred
 
@@ -117,7 +117,7 @@ class StateCluster(ModelBase):
 				state_matrix.update({state: {'fillKey':int(logreg_production.predict(combine))}})
 			return state_matrix
 
-		logreg_production = pickle_loader('mvp_2015_0801.pickle')
+		logreg_production = pickle_loader(pickle_file)
 
 		return mvp_state_clusters_v2(salary, family_size, own, rent)
 
